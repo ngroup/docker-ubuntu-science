@@ -10,7 +10,7 @@ For example, `{username}` can be replaced by  `someusernameyoudliketouse`
 
 ### Build Image
 ```bash
-$ docker build --build-arg user={username} pwd={userpassword} -t science/ubuntu ubuntu_science
+$ docker build --build-arg user={username} --build-arg pwd={userpassword} -t science/ubuntu https://github.com/ngroup/docker-ubuntu-science.git
 ```
 
 ### Run a Ubuntu Container
@@ -28,3 +28,6 @@ $ sudo iptables -A INPUT -p tcp --dport 8022 -j ACCEPT
 ```bash
 $ ssh -p 2222 {username}@{host_ip}
 ```
+
+## Author
+**Chun Nien** {contact@chunnien.com}
