@@ -11,7 +11,7 @@ RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 RUN useradd --create-home --shell /bin/bash ${user}
-VOLUME /home/${user}
+VOLUME /home/${user}/volume
 RUN echo "${user}:${pwd}" | chpasswd && adduser ${user} sudo
 RUN mkdir /run/sshd
 RUN echo "Port 22" | tee --append /etc/ssh/sshd_config
@@ -24,14 +24,21 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 ADD run.sh /run.sh
 RUN chmod +x /*.sh
 
-User ${user}
+COPY pyenv.sh /home/${user}/pyenv.sh
+RUN chmod +x /home/${user}/pyenv.sh
+RUN chown -R ${user} /home/${user}
+ENV HOME /home/${user}
+USER ${user}
 WORKDIR /home/${user}
+RUN ./pyenv.sh
+RUN rm pyenv.sh
+COPY pyenv_activate.sh /home/${user}/pyenv_activate.sh
+RUN chmod +x /home/${user}/pyenv_activate.sh
+RUN chown -R ${user} /home/${user}/pyenv_activate.sh
 
-ADD pyenv.sh /home/${user}/pyenv.sh
-
-User root
+USER root
 WORKDIR /
 
-EXPOSE 22 8022
+EXPOSE 22
 
 CMD ["/run.sh"]
