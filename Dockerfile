@@ -25,17 +25,20 @@ ADD run.sh /run.sh
 RUN chmod +x /*.sh
 
 COPY pyenv.sh /home/${user}/pyenv.sh
-RUN chmod +x /home/${user}/pyenv.sh
-RUN chown -R ${user} /home/${user}
+COPY pyenv_activate.sh /home/${user}/pyenv_activate.sh
+RUN chmod +x \
+    /home/${user}/pyenv.sh \
+    /home/${user}/pyenv_activate.sh
+
+RUN chown -R ${user} \
+    /home/${user} \
+    /home/${user}/pyenv_activate.sh
+
 ENV HOME /home/${user}
 USER ${user}
 WORKDIR /home/${user}
 RUN ./pyenv.sh
 RUN rm pyenv.sh
-COPY pyenv_activate.sh /home/${user}/pyenv_activate.sh
-RUN chmod +x /home/${user}/pyenv_activate.sh
-RUN chown -R ${user} /home/${user}/pyenv_activate.sh
-
 USER root
 WORKDIR /
 
