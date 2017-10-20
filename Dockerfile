@@ -13,10 +13,10 @@ RUN apt-get clean && \
 RUN useradd --create-home --shell /bin/bash ${user}
 VOLUME /home/${user}/volume
 RUN echo "${user}:${pwd}" | chpasswd && adduser ${user} sudo
-RUN mkdir /run/sshd
-RUN echo "Port 22" | tee --append /etc/ssh/sshd_config
-RUN echo "PermitRootLogin no" | tee --append /etc/ssh/sshd_config
-RUN echo "AllowUsers ${user}" | tee --append /etc/ssh/sshd_config
+RUN mkdir /run/sshd \
+    && echo "Port 22" | tee --append /etc/ssh/sshd_config \
+    && echo "PermitRootLogin no" | tee --append /etc/ssh/sshd_config \
+    && echo "AllowUsers ${user}" | tee --append /etc/ssh/sshd_config
 
 # SSH login fix. Otherwise user is kicked off after login
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
@@ -37,8 +37,8 @@ RUN chown -R ${user} \
 ENV HOME /home/${user}
 USER ${user}
 WORKDIR /home/${user}
-RUN ./pyenv.sh
-RUN rm pyenv.sh
+RUN ./pyenv.sh \
+    && rm pyenv.sh
 USER root
 WORKDIR /
 
