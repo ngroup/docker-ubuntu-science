@@ -10,7 +10,7 @@ RUN apt update && apt upgrade -y && DEBIAN_FRONTEND=noninteractive apt-get -y in
     liblapack-dev cython python-pip python3-dev python3-pip software-properties-common \
     make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
     wget curl llvm libncurses5-dev tk-dev neovim libopenblas-dev liblapack-dev libav-tools \
-    ruby iptables htop && \
+    ruby iptables htop tmux && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -21,7 +21,7 @@ RUN mkdir /run/sshd \
     && echo "PermitRootLogin no" | tee --append /etc/ssh/sshd_config \
     && echo "AllowUsers ${user}" | tee --append /etc/ssh/sshd_config
 
-VOLUME /home/${user}/volume
+VOLUME /home/${user}/data
 # SSH login fix. Otherwise user is kicked off after login
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
