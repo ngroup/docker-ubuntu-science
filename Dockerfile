@@ -29,6 +29,7 @@ RUN mkdir -p /scripts
 COPY run.sh /scripts/run.sh
 COPY pyenv.sh /scripts/pyenv.sh
 COPY pyenv_activate.sh /scripts/pyenv_activate.sh
+COPY tmux.sh /scripts/tmux.sh
 RUN chmod +x /scripts/*.sh
 
 USER root
