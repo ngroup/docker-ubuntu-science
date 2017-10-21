@@ -14,7 +14,7 @@ RUN apt update && apt upgrade -y && DEBIAN_FRONTEND=noninteractive apt-get -y in
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN useradd --shell /bin/bash ${user}
+RUN useradd --create-home --shell /bin/bash ${user}
 RUN echo "${user}:${pwd}" | chpasswd && adduser ${user} sudo
 RUN mkdir /run/sshd \
     && echo "Port 22" | tee --append /etc/ssh/sshd_config \
