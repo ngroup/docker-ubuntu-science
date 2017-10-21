@@ -25,24 +25,12 @@ VOLUME /home/${user}/volume
 # SSH login fix. Otherwise user is kicked off after login
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
-ADD run.sh /run.sh
-RUN chmod +x /*.sh
+RUN mkdir -p /scripts
+COPY run.sh /scripts/run.sh
+COPY pyenv.sh /scripts/pyenv.sh
+COPY pyenv_activate.sh /scripts/pyenv_activate.sh
+RUN chmod +x /scripts/*.sh
 
-COPY pyenv.sh /home/${user}/pyenv.sh
-COPY pyenv_activate.sh /home/${user}/pyenv_activate.sh
-RUN chmod +x \
-    /home/${user}/pyenv.sh \
-    /home/${user}/pyenv_activate.sh
-
-RUN chown -R ${user} \
-    /home/${user} \
-    /home/${user}/pyenv_activate.sh
-
-ENV HOME /home/${user}
-USER ${user}
-WORKDIR /home/${user}
-RUN ./pyenv.sh \
-    && rm pyenv.sh
 USER root
 WORKDIR /
 
